@@ -1,0 +1,24 @@
+{
+  "name": "Spotify Token Generator",
+  "description": "Web-based Spotify Refresh Token Generator - Host this so anyone can get their refresh token easily!",
+  "repository": "https://github.com/SahooShuvranshu/Spotify-Live-Banner",
+  "logo": "https://storage.googleapis.com/pr-newsroom-wp/1/2018/11/Spotify_Logo_RGB_Green.png",
+  "keywords": ["spotify", "oauth", "token", "generator", "flask"],
+  "env": {
+    "REDIRECT_URI": {
+      "description": "The OAuth redirect URI (will be automatically set to https://your-app-name.herokuapp.com/callback)",
+      "required": false
+    }
+  },
+  "formation": {
+    "web": {
+      "quantity": 1,
+      "size": "free"
+    }
+  },
+  "buildpacks": [
+    {
+      "url": "heroku/python"
+    }
+  ]
+}

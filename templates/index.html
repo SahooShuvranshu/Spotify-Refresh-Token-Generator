@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spotify Refresh Token Generator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #1DB954 0%, #191414 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .logo {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+        }
+        
+        h1 {
+            color: #191414;
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .step {
+            background: #f8f9fa;
+            border-left: 4px solid #1DB954;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+        }
+        
+        .step-number {
+            display: inline-block;
+            background: #1DB954;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 30px;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        
+        .step-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #191414;
+            margin-bottom: 10px;
+        }
+        
+        .step-desc {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+        
+        .input-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #191414;
+            font-weight: 500;
+            font-size: 14px;
+        }
+        
+        input[type="text"] {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+        
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #1DB954;
+            box-shadow: 0 0 0 3px rgba(29, 185, 84, 0.1);
+        }
+        
+        .btn {
+            width: 100%;
+            padding: 15px;
+            background: #1DB954;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+        
+        .btn:hover {
+            background: #1ed760;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(29, 185, 84, 0.3);
+        }
+        
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .link-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #1DB954;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+        
+        .link-button:hover {
+            background: #1ed760;
+            transform: translateY(-1px);
+        }
+        
+        .info-box {
+            background: #e3f2fd;
+            border-left: 4px solid #2196F3;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 20px 0;
+        }
+        
+        .info-box p {
+            color: #1565c0;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        
+        .info-box strong {
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #1DB954;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            color: #666;
+            font-size: 12px;
+        }
+        
+        .footer a {
+            color: #1DB954;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <svg class="logo" viewBox="0 0 168 168" xmlns="http://www.w3.org/2000/svg">
+                <circle fill="#1DB954" cx="84" cy="84" r="84"/>
+                <path fill="white" d="M84,16c-37.555,0-68,30.445-68,68s30.445,68,68,68s68-30.445,68-68S121.555,16,84,16z M116.51,115.55 c-1.271,2.117-3.981,2.785-6.054,1.492c-16.602-10.147-37.485-12.445-62.078-6.816c-2.363,0.542-4.708-0.928-5.241-3.281 c-0.542-2.362,0.919-4.708,3.281-5.241c26.92-6.166,50.003-3.513,68.755,7.889C117.282,110.865,117.781,113.441,116.51,115.55z M125.788,93.787c-1.6,2.596-5.007,3.407-7.594,1.807c-18.999-11.683-47.958-15.064-70.413-8.24 c-2.925,0.89-6.014-0.765-6.904-3.699c-0.881-2.925,0.774-6.014,3.699-6.895c25.649-7.799,57.164-4.021,78.817,9.403 C125.994,87.763,126.805,91.19,125.788,93.787z M126.496,71.256c-22.773-13.521-60.349-14.768-82.084-8.166 c-3.506,1.067-7.207-0.907-8.283-4.404c-1.067-3.506,0.907-7.207,4.413-8.283c24.942-7.576,66.508-6.106,92.638,9.449 c3.24,1.919,4.296,6.079,2.377,9.319C133.638,72.412,129.735,73.175,126.496,71.256z"/>
+            </svg>
+            <h1>🎵 Spotify Token Generator</h1>
+            <p class="subtitle">Get your refresh token in 3 easy steps!</p>
+        </div>
+
+        <div class="step">
+            <div class="step-title">
+                <span class="step-number">1</span>
+                Create Spotify App
+            </div>
+            <div class="step-desc">
+                First, create an app on Spotify Developer Dashboard:
+                <br><br>
+                • App name: <strong>My Spotify Widget</strong> (or anything)<br>
+                • Redirect URI: <strong id="redirectUri"></strong><br>
+                • APIs: Web API and Web Playback SDK
+            </div>
+            <a href="https://developer.spotify.com/dashboard/create" target="_blank" class="link-button">
+                📝 Create Spotify App
+            </a>
+        </div>
+
+        <div class="step">
+            <div class="step-title">
+                <span class="step-number">2</span>
+                Enter Your Credentials
+            </div>
+            <div class="input-group">
+                <label for="clientId">Client ID</label>
+                <input type="text" id="clientId" placeholder="Paste your Client ID here">
+            </div>
+            <div class="input-group">
+                <label for="clientSecret">Client Secret</label>
+                <input type="text" id="clientSecret" placeholder="Paste your Client Secret here">
+            </div>
+            <button class="btn" onclick="startAuth()">🚀 Authorize with Spotify</button>
+        </div>
+
+        <div class="info-box">
+            <strong>🔒 Privacy First</strong>
+            <p>Your credentials are never stored on our servers. Everything happens in your browser and directly with Spotify's API.</p>
+        </div>
+
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>Redirecting to Spotify...</p>
+        </div>
+
+        <div class="footer">
+            Made with ❤️ for <a href="https://github.com/SahooShuvranshu/Spotify-Live-Banner" target="_blank">Spotify Live Banner</a>
+        </div>
+    </div>
+
+    <script>
+        // Set redirect URI in the page
+        const redirectUri = window.location.origin + '/callback';
+        document.getElementById('redirectUri').textContent = redirectUri;
+
+        async function startAuth() {
+            const clientId = document.getElementById('clientId').value.trim();
+            const clientSecret = document.getElementById('clientSecret').value.trim();
+
+            if (!clientId || !clientSecret) {
+                alert('⚠️ Please enter both Client ID and Client Secret!');
+                return;
+            }
+
+            // Store client secret for later (in sessionStorage, not localStorage for security)
+            sessionStorage.setItem('client_id', clientId);
+            sessionStorage.setItem('client_secret', clientSecret);
+
+            document.getElementById('loading').style.display = 'block';
+
+            try {
+                const response = await fetch('/start', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ client_id: clientId })
+                });
+
+                const data = await response.json();
+
+                if (data.auth_url) {
+                    window.location.href = data.auth_url;
+                } else {
+                    alert('❌ Error: ' + (data.error || 'Unknown error'));
+                    document.getElementById('loading').style.display = 'none';
+                }
+            } catch (error) {
+                alert('❌ Error: ' + error.message);
+                document.getElementById('loading').style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>

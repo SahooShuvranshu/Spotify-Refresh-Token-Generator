@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Getting Your Token - Spotify Token Generator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #1DB954 0%, #191414 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 700px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        h1 {
+            color: #191414;
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        
+        .success-icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+        }
+        
+        .step {
+            background: #f8f9fa;
+            border-left: 4px solid #1DB954;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+        }
+        
+        .step-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #191414;
+            margin-bottom: 15px;
+        }
+        
+        .code-box {
+            background: #263238;
+            color: #aed581;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            overflow-x: auto;
+            margin: 10px 0;
+            position: relative;
+        }
+        
+        .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #1DB954;
+            color: white;
+            border: none;
+            padding: 5px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        
+        .copy-btn:hover {
+            background: #1ed760;
+        }
+        
+        .input-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #191414;
+            font-weight: 500;
+            font-size: 14px;
+        }
+        
+        input[type="text"], input[type="password"] {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+        
+        input[type="text"]:focus, input[type="password"]:focus {
+            outline: none;
+            border-color: #1DB954;
+            box-shadow: 0 0 0 3px rgba(29, 185, 84, 0.1);
+        }
+        
+        .btn {
+            width: 100%;
+            padding: 15px;
+            background: #1DB954;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+        
+        .btn:hover {
+            background: #1ed760;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(29, 185, 84, 0.3);
+        }
+        
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .result-box {
+            display: none;
+            background: #e8f5e9;
+            border: 2px solid #1DB954;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+        
+        .result-box.show {
+            display: block;
+        }
+        
+        .result-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #1DB954;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .token-display {
+            background: white;
+            padding: 15px;
+            border-radius: 6px;
+            word-break: break-all;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            margin: 10px 0;
+            border: 1px solid #1DB954;
+        }
+        
+        .error-box {
+            display: none;
+            background: #ffebee;
+            border: 2px solid #f44336;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            color: #c62828;
+        }
+        
+        .error-box.show {
+            display: block;
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #1DB954;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="success-icon">✅</div>
+            <h1>Step 3: Get Your Refresh Token</h1>
+        </div>
+
+        <div class="step">
+            <div class="step-title">Authorization Code Received!</div>
+            <p>Great! Spotify authorized your app. Now enter your Client Secret to exchange this code for your refresh token.</p>
+            <div class="code-box">
+                <span>Authorization Code:</span>
+                <div id="authCode">{{ code }}</div>
+                <button class="copy-btn" onclick="copyCode()">📋 Copy</button>
+            </div>
+        </div>
+
+        <div class="step">
+            <div class="input-group">
+                <label for="clientSecret">Client Secret</label>
+                <input type="password" id="clientSecret" placeholder="Enter your Client Secret">
+            </div>
+            <button class="btn" onclick="exchangeToken()">🎯 Get Refresh Token</button>
+        </div>
+
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>Exchanging code for refresh token...</p>
+        </div>
+
+        <div class="result-box" id="resultBox">
+            <div class="result-title">🎉 Success! Here's Your Refresh Token:</div>
+            <label>CLIENT_ID</label>
+            <div class="token-display" id="displayClientId"></div>
+            <button class="copy-btn" onclick="copyText('displayClientId')" style="position: static; margin-top: 5px;">📋 Copy CLIENT_ID</button>
+            
+            <label style="margin-top: 15px;">CLIENT_SECRET</label>
+            <div class="token-display" id="displayClientSecret"></div>
+            <button class="copy-btn" onclick="copyText('displayClientSecret')" style="position: static; margin-top: 5px;">📋 Copy CLIENT_SECRET</button>
+            
+            <label style="margin-top: 15px;">REFRESH_TOKEN</label>
+            <div class="token-display" id="displayRefreshToken"></div>
+            <button class="copy-btn" onclick="copyText('displayRefreshToken')" style="position: static; margin-top: 5px;">📋 Copy REFRESH_TOKEN</button>
+            
+            <p style="margin-top: 20px; text-align: center; color: #666; font-size: 14px;">
+                ✅ Copy these three values and add them as environment variables in your hosting platform!
+            </p>
+        </div>
+
+        <div class="error-box" id="errorBox">
+            <strong>❌ Error:</strong>
+            <p id="errorMessage"></p>
+        </div>
+    </div>
+
+    <script>
+        const authCode = "{{ code }}";
+        const redirectUri = "{{ redirect_uri }}";
+
+        // Try to get credentials from sessionStorage
+        const storedClientId = sessionStorage.getItem('client_id');
+        const storedClientSecret = sessionStorage.getItem('client_secret');
+
+        if (storedClientSecret) {
+            document.getElementById('clientSecret').value = storedClientSecret;
+        }
+
+        function copyCode() {
+            navigator.clipboard.writeText(authCode);
+            alert('✅ Code copied to clipboard!');
+        }
+
+        function copyText(elementId) {
+            const text = document.getElementById(elementId).textContent;
+            navigator.clipboard.writeText(text);
+            alert('✅ Copied to clipboard!');
+        }
+
+        async function exchangeToken() {
+            const clientSecret = document.getElementById('clientSecret').value.trim();
+
+            if (!clientSecret) {
+                alert('⚠️ Please enter your Client Secret!');
+                return;
+            }
+
+            const clientId = storedClientId || prompt('Enter your Client ID:');
+            if (!clientId) {
+                alert('⚠️ Client ID is required!');
+                return;
+            }
+
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('resultBox').classList.remove('show');
+            document.getElementById('errorBox').classList.remove('show');
+
+            try {
+                const response = await fetch('/exchange', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        client_id: clientId,
+                        client_secret: clientSecret,
+                        code: authCode
+                    })
+                });
+
+                const data = await response.json();
+                document.getElementById('loading').style.display = 'none';
+
+                if (data.success && data.refresh_token) {
+                    document.getElementById('displayClientId').textContent = clientId;
+                    document.getElementById('displayClientSecret').textContent = clientSecret;
+                    document.getElementById('displayRefreshToken').textContent = data.refresh_token;
+                    document.getElementById('resultBox').classList.add('show');
+                    
+                    // Clear sensitive data from sessionStorage
+                    sessionStorage.clear();
+                } else {
+                    document.getElementById('errorMessage').textContent = data.error || 'Unknown error occurred';
+                    document.getElementById('errorBox').classList.add('show');
+                }
+            } catch (error) {
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('errorMessage').textContent = error.message;
+                document.getElementById('errorBox').classList.add('show');
+            }
+        }
+    </script>
+</body>
+</html>
