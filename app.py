@@ -9,7 +9,7 @@ app = Flask(__name__)
 # Spotify OAuth endpoints
 SPOTIFY_AUTH_URL = "https://accounts.spotify.com/authorize"
 SPOTIFY_TOKEN_URL = "https://accounts.spotify.com/api/token"
-REDIRECT_URI = os.environ.get("REDIRECT_URI", "http://localhost:5000/callback")
+REDIRECT_URI = os.environ.get("REDIRECT_URI", "https://spotify-refresh-token-generator.onrender.com/callback")
 
 @app.route('/')
 def index():
