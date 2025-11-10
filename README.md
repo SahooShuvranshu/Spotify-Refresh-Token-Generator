@@ -247,6 +247,7 @@ You can use Environment Variables to configure the app.
 
 ### 📁 Project Structure
 
+```text
 Token-Generator/
 │
 ├── app.py                      # Main Flask application
@@ -261,6 +262,8 @@ Token-Generator/
 └── templates/                  # HTML templates
 ├── index.html             # Home page with OAuth flow
 └── callback.html          # Token display page
+```
+
 
 ### 🔌 API Endpoints
 
@@ -314,8 +317,6 @@ Don't panic! Here are fixes for common issues:
 
 ## 💬 Need Help? Join Our Community!
 
-<div align="center">
-
 ### 🎮 Discord Support Server
 
 [![Discord](https://img.shields.io/badge/Discord-Join%20Server-5865F2?style=for-the-badge&logo=discord&logoColor=white)](https://discord.gg/your-invite-link)
@@ -329,10 +330,6 @@ Don't panic! Here are fixes for common issues:
 * 📢 Get updates on new features
 
 **[Click here to join our Discord server!](https://discord.gg/your-invite-link)**
-
-</div>
-
-> **Note:** Remember to replace `https://discord.gg/your-invite-link` with your actual Discord server invite link!
 
 ---
 
