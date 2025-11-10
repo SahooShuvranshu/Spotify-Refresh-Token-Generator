@@ -246,3 +246,131 @@ You can use Environment Variables to configure the app.
 | `FLASK_ENV` | Flask environment | No | `production` |
 
 ### 📁 Project Structure
+
+Token-Generator/
+│
+├── app.py                      # Main Flask application
+├── requirements.txt            # Python dependencies
+├── Procfile                    # Heroku process file
+├── runtime.txt                 # Python version specification
+├── render.yaml                 # Render deployment config
+├── vercel.json                 # Vercel deployment config
+├── test_app.py                 # Unit tests
+├── README.md                   # This file
+│
+└── templates/                  # HTML templates
+├── index.html             # Home page with OAuth flow
+└── callback.html          # Token display page
+
+### 🔌 API Endpoints
+
+| Method | Endpoint | Description |
+| :--- | :--- | :--- |
+| `GET /` | Home page | Serves the main HTML page. |
+| `POST /start` | Initiate Auth | Takes `client_id` and returns a Spotify `auth_url`. |
+| `GET /callback` | Spotify Callback | Handles the redirect from Spotify, contains `code`. |
+| `POST /exchange` | Get Token | Exchanges `code`, `client_id`, `client_secret` for tokens. |
+| `GET /health` | Health Check | Returns `OK` (200 status). |
+
+### 🔒 Security
+
+This application is designed with security as a top priority:
+
+| Feature | Implementation |
+| :--- | :--- |
+| **No Database** | Zero persistent storage of credentials. |
+| **Session-Only Storage** | Credentials are cleared after the token is generated. |
+| **HTTPS Enforced** | All production deployments use SSL/TLS. |
+| **No Server-Side Storage** | Server only facilitates the OAuth flow. |
+
+**Best Practices for Users:**
+1.  **Never share your Client Secret** - Treat it like a password.
+2.  **Use HTTPS URLs** - Always deploy with SSL.
+3.  **Revoke unused apps** - Delete old apps from your Spotify Dashboard.
+
+---
+
+## 😅 Troubleshooting
+
+Don't panic! Here are fixes for common issues:
+
+#### ❌ "Invalid redirect URI" Error
+* **Problem:** Spotify doesn't recognize your callback URL.
+* **Solution:** Go to your [Spotify Dashboard](https://developer.spotify.com/dashboard/). Click your app -> Edit Settings. Make SURE the redirect URI is **EXACTLY** `https://your-exact-url.com/callback`. No typos! No extra `/` at the end!
+
+#### ❌ "Invalid client" Error
+* **Problem:** Wrong Client ID or Client Secret.
+* **Solution:** Go back to your Spotify Dashboard and carefully copy the Client ID and Client Secret again. Ensure there are no extra spaces.
+
+#### ❌ "Authorization code expired" Error
+* **Problem:** You took too long (more than 10 minutes) to exchange the code.
+* **Solution:** Just start the process over from Step 1. Be faster this time! ⚡
+
+#### ❌ App Not Loading After Deployment
+* **Problem:** Something went wrong during deployment.
+* **Solution:** Check your platform's logs (Render, Railway, etc.). The error message is usually there. Make sure your `Start Command` is `gunicorn app:app`.
+
+---
+
+## 💬 Need Help? Join Our Community!
+
+<div align="center">
+
+### 🎮 Discord Support Server
+
+[![Discord](https://img.shields.io/badge/Discord-Join%20Server-5865F2?style=for-the-badge&logo=discord&logoColor=white)](https://discord.gg/your-invite-link)
+
+**Get help from the community!**
+
+* 💡 Ask questions and get instant answers
+* 🤝 Share your projects built with this tool
+* 🐛 Report bugs and get support
+* 🎉 Connect with other developers
+* 📢 Get updates on new features
+
+**[Click here to join our Discord server!](https://discord.gg/your-invite-link)**
+
+</div>
+
+> **Note:** Remember to replace `https://discord.gg/your-invite-link` with your actual Discord server invite link!
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome!
+
+### Reporting Bugs
+1.  Check existing [Issues](httpss://github.com/SahooShuvranshu/Spotify-Refresh-Token-Generator/issues).
+2.  If it's a new bug, create a new issue with steps to reproduce.
+
+### Submitting Pull Requests
+1.  Fork the repository.
+2.  Create a feature branch: `git checkout -b feature/amazing-feature`
+3.  Make your changes and test them locally.
+4.  Commit your changes: `git commit -m 'Add amazing feature'`
+5.  Push to the branch: `git push origin feature/amazing-feature`
+6.  Open a Pull Request!
+
+---
+
+## 📄 License
+
+This project is licensed under the **MIT License**.
+Basically, do whatever you want with this code!
+
+---
+
+## 🌟 Show Some Love!
+
+If this tool helped you, consider:
+
+* ⭐ **Starring this repo!**
+* 🍴 **Forking it** to make your own version.
+* 💌 **Sharing it** with other developers.
+
+<div align="center">
+
+**[⬆ Back to Top](#-spotify-token-generator---super-easy-edition)**
+
+</div>
